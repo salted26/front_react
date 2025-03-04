@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
-import {createBoard} from "../services/BoardService.js";
-import {useNavigate} from "react-router-dom";
+import {createBoard, updateBoard} from "../services/BoardService.js";
+import {useNavigate, useParams} from "react-router-dom";
 
 const InsertComponent = () => {
+
+  const {no} = useParams();
 
   const [id, setId] = useState('');
   const [title, setTitle] = useState('');
@@ -11,21 +13,29 @@ const InsertComponent = () => {
 
   const navigate = useNavigate();
 
-  const saveBoard = async (e) => {
+  const fnSaveOrUpdateBoard = async (e) => {
     e.preventDefault();
 
     if(validateForm()){
       const board = {id, title, writer, content};
       console.log(board);
 
-      try {
+      if (no) {
+        updateBoard(no, board).then(res => {
+          console.log(res);
+          navigate(`/board/${no}`);
+        }).catch(error => {
+          console.log(error);
+        })
+      } else {
         createBoard(board).then(res => {
-          console.log(res.data);
-          navigate('/');
-        });
-      } catch (e) {
-        console.log(e);
+          console.log(res);
+          navigate(`/board`);
+        }).catch(error => {
+          console.log(error);
+        })
       }
+
     }
   }
 
@@ -125,7 +135,7 @@ const InsertComponent = () => {
                   { errors.content && <div className="invalid-feedback">{errors.content}</div>}
                 </div>
 
-                <button className="btn btn-outline-success" onClick={saveBoard}>Write</button>
+                <button className="btn btn-outline-success" onClick={fnSaveOrUpdateBoard}>Write</button>
               </form>
             </div>
           </div>

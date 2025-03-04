@@ -26,10 +26,10 @@ const ListBoardComponent = () => {
       <table className="table table-striped">
         <thead>
           <tr>
-            <th>No</th>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Writer</th>
+            <th align="center">No</th>
+            <th align="center">Title</th>
+            <th align="center">Writer</th>
+            <th align="center">조회수</th>
           </tr>
         </thead>
         <tbody>
@@ -37,9 +37,9 @@ const ListBoardComponent = () => {
             return (
               <tr key={index} onClick={() => navigate(`/board/${data.no}`)}>
                 <td>{data.no}</td>
-                <td>{data.id}</td>
                 <td>{data.title}</td>
                 <td>{data.writer}</td>
+                <td align="center">{data.views}</td>
               </tr>
             )
           })}
