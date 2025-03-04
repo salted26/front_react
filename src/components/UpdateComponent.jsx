@@ -138,7 +138,6 @@ const UpdateComponent = () => {
                 <div className="form-group mb-2">
                   <label className="form-label">내용 : </label>
                   <textarea className={`form-control ${errors.content ? 'is-invalid' : ''}`}
-                         type="text"
                          placeholder="내용을 입력하세요"
                          name="content"
                             defaultValue={board.content}
