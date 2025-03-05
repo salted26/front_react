@@ -1,11 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
+import {createBoard, updateBoard} from "../../services/BoardService.js";
 import {useNavigate, useParams} from "react-router-dom";
-import {createBoard, selectBoard, updateBoard} from "../services/BoardService.js";
 
-const UpdateComponent = () => {
+const InsertComponent = () => {
 
   const {no} = useParams();
-  const [board, setBoard] = useState({})
 
   const [id, setId] = useState('');
   const [title, setTitle] = useState('');
@@ -14,16 +13,10 @@ const UpdateComponent = () => {
 
   const navigate = useNavigate();
 
-  const getBoard = async (no) => {
-    selectBoard(no).then(res => {
-      setBoard(res.data);
-    })
-  }
-
   const fnSaveOrUpdateBoard = async (e) => {
     e.preventDefault();
 
-    if (validateForm()) {
+    if(validateForm()){
       const board = {id, title, writer, content};
       console.log(board);
 
@@ -42,20 +35,15 @@ const UpdateComponent = () => {
           console.log(error);
         })
       }
+
     }
   }
 
-  useEffect(() => {
-    if(no){
-      getBoard(no);
-    }
-  }, [no])
-
   const [errors, setErrors] = useState({
-    id: id,
-    title: title,
-    writer: writer,
-    content: content
+    id: "",
+    title: "",
+    writer:"",
+    content:""
   })
 
   const validateForm = () => {
@@ -108,7 +96,7 @@ const UpdateComponent = () => {
                          type="text"
                          placeholder="아이디를 입력하세요"
                          name="id"
-                         defaultValue={board.id}
+                         value={id}
                          onChange={(e) => setId(e.target.value)}
                   />
                   { errors.id && <div className="invalid-feedback">{errors.id}</div> }
@@ -119,7 +107,7 @@ const UpdateComponent = () => {
                          type="text"
                          placeholder="제목을 입력하세요"
                          name="title"
-                         defaultValue={board.title}
+                         value={title}
                          onChange={(e) => setTitle(e.target.value)}
                   />
                   { errors.title && <div className="invalid-feedback">{errors.title}</div>}
@@ -130,30 +118,33 @@ const UpdateComponent = () => {
                          type="text"
                          placeholder="작성자를 입력하세요"
                          name="writer"
-                         defaultValue={board.writer}
+                         value={writer}
                          onChange={(e) => setWriter(e.target.value)}
                   />
                   { errors.writer && <div className="invalid-feedback">{errors.writer}</div>}
                 </div>
                 <div className="form-group mb-2">
                   <label className="form-label">내용 : </label>
-                  <textarea className={`form-control ${errors.content ? 'is-invalid' : ''}`}
+                  <input className={`form-control ${errors.content ? 'is-invalid' : ''}`}
+                         type="text"
                          placeholder="내용을 입력하세요"
                          name="content"
-                            defaultValue={board.content}
+                         value={content}
                          onChange={(e) => setContent(e.target.value)}
                   />
                   { errors.content && <div className="invalid-feedback">{errors.content}</div>}
                 </div>
 
-                <button className="btn btn-outline-success" onClick={fnSaveOrUpdateBoard}>수정</button>
-                <button className="btn btn-outline-warning" onClick={()=> navigate(`/board/${no}`)}>취소</button>
+                <button className="btn btn-outline-success" onClick={fnSaveOrUpdateBoard}>Write</button>
               </form>
             </div>
           </div>
         </div>
       </div>
   );
+
+
+
 };
 
-export default UpdateComponent;
+export default InsertComponent;

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {listBoard} from "../services/BoardService.js";
+import {listBoard} from "../../services/BoardService.js";
 import {useNavigate} from "react-router-dom";
 
 const ListBoardComponent = () => {

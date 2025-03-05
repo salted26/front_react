@@ -1,10 +1,11 @@
-import React, {useState} from 'react';
-import {createBoard, updateBoard} from "../services/BoardService.js";
+import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from "react-router-dom";
+import {createBoard, selectBoard, updateBoard} from "../../services/BoardService.js";
 
-const InsertComponent = () => {
+const UpdateComponent = () => {
 
   const {no} = useParams();
+  const [board, setBoard] = useState({})
 
   const [id, setId] = useState('');
   const [title, setTitle] = useState('');
@@ -13,16 +14,21 @@ const InsertComponent = () => {
 
   const navigate = useNavigate();
 
+  const getBoard = async (no) => {
+    selectBoard(no).then(res => {
+      setBoard(res.data);
+    })
+  }
+
   const fnSaveOrUpdateBoard = async (e) => {
     e.preventDefault();
 
-    if(validateForm()){
+    if (validateForm()) {
       const board = {id, title, writer, content};
-      console.log(board);
 
       if (no) {
         updateBoard(no, board).then(res => {
-          console.log(res);
+          console.log("수정 : " + res);
           navigate(`/board/${no}`);
         }).catch(error => {
           console.log(error);
@@ -35,15 +41,20 @@ const InsertComponent = () => {
           console.log(error);
         })
       }
-
     }
   }
 
+  useEffect(() => {
+    if(no){
+      getBoard(no);
+    }
+  }, [no])
+
   const [errors, setErrors] = useState({
-    id: "",
-    title: "",
-    writer:"",
-    content:""
+    id: id,
+    title: title,
+    writer: writer,
+    content: content
   })
 
   const validateForm = () => {
@@ -51,33 +62,33 @@ const InsertComponent = () => {
 
     const errorsCopy = {...errors};
 
-    if(id.trim()) {
-      errorsCopy.id = "";
-    } else {
-      errorsCopy.id = '아이디는 필수 입력입니다.'
-      valid = false;
-    }
-
-    if(title.trim()) {
-      errorsCopy.title = "";
-    } else {
-      errorsCopy.title = '제목은 필수 입력입니다.'
-      valid = false;
-    }
-
-    if(writer.trim()) {
-      errorsCopy.writer = "";
-    } else {
-      errorsCopy.writer = '작성자는 필수 입력입니다.'
-      valid = false;
-    }
-
-    if(content.trim()) {
-      errorsCopy.content = "";
-    } else {
-      errorsCopy.content = '내용은 필수 입력입니다..'
-      valid = false;
-    }
+    // if(id.trim()) {
+    //   errorsCopy.id = "";
+    // } else {
+    //   errorsCopy.id = '아이디는 필수 입력입니다.'
+    //   valid = false;
+    // }
+    //
+    // if(title.trim()) {
+    //   errorsCopy.title = "";
+    // } else {
+    //   errorsCopy.title = '제목은 필수 입력입니다.'
+    //   valid = false;
+    // }
+    //
+    // if(writer.trim()) {
+    //   errorsCopy.writer = "";
+    // } else {
+    //   errorsCopy.writer = '작성자는 필수 입력입니다.'
+    //   valid = false;
+    // }
+    //
+    // if(content.trim()) {
+    //   errorsCopy.content = "";
+    // } else {
+    //   errorsCopy.content = '내용은 필수 입력입니다..'
+    //   valid = false;
+    // }
 
     setErrors(errorsCopy);
     return valid;
@@ -96,7 +107,7 @@ const InsertComponent = () => {
                          type="text"
                          placeholder="아이디를 입력하세요"
                          name="id"
-                         value={id}
+                         defaultValue={board.id}
                          onChange={(e) => setId(e.target.value)}
                   />
                   { errors.id && <div className="invalid-feedback">{errors.id}</div> }
@@ -107,7 +118,7 @@ const InsertComponent = () => {
                          type="text"
                          placeholder="제목을 입력하세요"
                          name="title"
-                         value={title}
+                         defaultValue={board.title}
                          onChange={(e) => setTitle(e.target.value)}
                   />
                   { errors.title && <div className="invalid-feedback">{errors.title}</div>}
@@ -118,33 +129,29 @@ const InsertComponent = () => {
                          type="text"
                          placeholder="작성자를 입력하세요"
                          name="writer"
-                         value={writer}
+                         defaultValue={board.writer}
                          onChange={(e) => setWriter(e.target.value)}
                   />
                   { errors.writer && <div className="invalid-feedback">{errors.writer}</div>}
                 </div>
                 <div className="form-group mb-2">
                   <label className="form-label">내용 : </label>
-                  <input className={`form-control ${errors.content ? 'is-invalid' : ''}`}
-                         type="text"
+                  <textarea className={`form-control ${errors.content ? 'is-invalid' : ''}`}
                          placeholder="내용을 입력하세요"
                          name="content"
-                         value={content}
+                            defaultValue={board.content}
                          onChange={(e) => setContent(e.target.value)}
                   />
                   { errors.content && <div className="invalid-feedback">{errors.content}</div>}
                 </div>
-
-                <button className="btn btn-outline-success" onClick={fnSaveOrUpdateBoard}>Write</button>
+                <button className="btn btn-outline-success" onClick={fnSaveOrUpdateBoard}>수정</button>
+                <button className="btn btn-outline-warning" onClick={()=> navigate(`/board/${no}`)}>취소</button>
               </form>
             </div>
           </div>
         </div>
       </div>
   );
-
-
-
 };
 
-export default InsertComponent;
+export default UpdateComponent;

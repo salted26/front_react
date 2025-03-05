@@ -1,11 +1,11 @@
 import './App.css'
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import ListBoardComponent from "./components/ListBoardComponent.jsx";
+import ListBoardComponent from "./components/board/ListBoardComponent.jsx";
 import HeaderComponent from "./components/HeaderComponent.jsx";
 import FooterComponent from "./components/FooterComponent.jsx";
-import InsertComponent from "./components/InsertComponent.jsx";
-import BoardComponent from "./components/BoardComponent.jsx";
-import UpdateComponent from "./components/UpdateComponent.jsx";
+import InsertComponent from "./components/board/InsertComponent.jsx";
+import BoardComponent from "./components/board/BoardComponent.jsx";
+import UpdateComponent from "./components/board/UpdateComponent.jsx";
 
 function App() {
   return (

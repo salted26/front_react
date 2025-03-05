@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {selectBoard, deleteBoard} from "../services/BoardService.js";
+import {selectBoard, deleteBoard} from "../../services/BoardService.js";
 import {useNavigate, useParams} from "react-router-dom";
 
 const BoardComponent = () => {
@@ -52,8 +52,11 @@ const BoardComponent = () => {
                 </div>
             </div>
           </div>
-          <button className="btn btn-outline-info" onClick={fnUpdateBoard}>수정</button>
-          <button className="btn btn-outline-info" onClick={fnDeleteBoard}>삭제</button>
+          <div className="card-footer">
+            <button className="btn btn-outline-info" onClick={()=> navigate("/board")}>목록</button>
+            <button className="btn btn-outline-warning" onClick={fnUpdateBoard}>수정</button>
+            <button className="btn btn-outline-danger" onClick={fnDeleteBoard}>삭제</button>
+          </div>
         </div>
       </div>
   );
