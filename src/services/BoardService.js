@@ -6,6 +6,8 @@ export const listBoard = () => axios.get(REST_API_BASE_URL);
 
 export const selectBoard = (no) => axios.get(`${REST_API_BASE_URL}/${no}`);
 
+export const selectPagination = (page, pageSize) => axios.get(`${REST_API_BASE_URL}?page=${page}&pageSize=${pageSize}`);
+
 export const createBoard = (board) => axios.post(`${REST_API_BASE_URL}/write`, board);
 
 // mybatis
