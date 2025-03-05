@@ -10,7 +10,8 @@ export const createBoard = (board) => axios.post(`${REST_API_BASE_URL}/write`, b
 
 // mybatis
 // export const updateBoard = (no, board) => axios.post(`${REST_API_BASE_URL}/update/${no}`, board);
+// export const deleteBoard = (no) => axios.post(`${REST_API_BASE_URL}/delete/${no}`);
 
 export const updateBoard = (no, board) => axios.put(`${REST_API_BASE_URL}/update/${no}`, board);
 
-export const deleteBoard = (no) => axios.post(`${REST_API_BASE_URL}/delete/${no}`);
+export const deleteBoard = (no) => axios.delete(`${REST_API_BASE_URL}/delete/${no}`);
