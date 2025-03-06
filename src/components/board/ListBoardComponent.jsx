@@ -71,7 +71,7 @@ const ListBoardComponent = () => {
           <FontAwesomeIcon icon={faMagnifyingGlass} />
         </button>
       </form>
-      <button className="btn btn-primary" onClick={() => fnWrite}>Write</button>
+
       <table className="table table-striped">
         <thead>
           <tr>
@@ -96,6 +96,9 @@ const ListBoardComponent = () => {
           })}
         </tbody>
       </table>
+      <div className="btn-box">
+        <button className="btn btn-primary" onClick={() => fnWrite}>Write</button>
+      </div>
       <nav aria-label="Page navigation example" style={{display: 'flex', justifycontent: 'center'}}>
         <ul className="pagination">
           <li className="page-item">

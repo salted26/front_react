@@ -6,6 +6,7 @@ import FooterComponent from "./components/FooterComponent.jsx";
 import InsertComponent from "./components/board/InsertComponent.jsx";
 import BoardComponent from "./components/board/BoardComponent.jsx";
 import UpdateComponent from "./components/board/UpdateComponent.jsx";
+import LoginComponent from "./components/user/LoginComponent.jsx";
 
 function App() {
   return (
@@ -13,11 +14,14 @@ function App() {
       <HeaderComponent />
       <Routes>
         {/*http://localhost:3000*/}
+        {/*board*/}
         <Route path="/" element={<ListBoardComponent />} />
         <Route path="/board" element={<ListBoardComponent />} />
         <Route path="/write" element={<InsertComponent />} />
         <Route path="/board/:no" element={<BoardComponent />} />
         <Route path="/board/update/:no" element={<UpdateComponent />} />
+        {/*login*/}
+        <Route path="/login" element={<LoginComponent />} />
       </Routes>
       <FooterComponent />
     </BrowserRouter>

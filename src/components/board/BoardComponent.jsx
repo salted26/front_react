@@ -20,8 +20,12 @@ const BoardComponent = () => {
   }
 
   const fnDeleteBoard = () => {
-    deleteBoard(no);
-    navigate(`/board`);
+    if(window.confirm("삭제하시겠습니까?")){
+      deleteBoard(no);
+      alert("삭제되었습니다.");
+      navigate(`/board`);
+    }
+    return false;
   }
 
   useEffect(() => {
@@ -52,11 +56,11 @@ const BoardComponent = () => {
                 </div>
             </div>
           </div>
-          <div className="card-footer">
-            <button className="btn btn-outline-info" onClick={()=> navigate("/board")}>목록</button>
-            <button className="btn btn-outline-warning" onClick={fnUpdateBoard}>수정</button>
-            <button className="btn btn-outline-danger" onClick={fnDeleteBoard}>삭제</button>
-          </div>
+        </div>
+        <div className="btn-box">
+          <button className="btn btn-outline-info" onClick={()=> navigate("/board")}>목록</button>
+          <button className="btn btn-outline-warning" onClick={fnUpdateBoard}>수정</button>
+          <button className="btn btn-outline-danger" onClick={fnDeleteBoard}>삭제</button>
         </div>
       </div>
   );
