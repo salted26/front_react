@@ -4,9 +4,9 @@ const REST_API_BASE_URL = "http://localhost:8080/api/board";
 
 export const listBoard = () => axios.get(REST_API_BASE_URL);
 
-export const selectBoard = (no) => axios.get(`${REST_API_BASE_URL}/${no}`);
+export const boardList = (page, pageSize, searchKeyword) => axios.get(`${REST_API_BASE_URL}?page=${page}&pageSize=${pageSize}&searchKeyword=${searchKeyword}`);
 
-export const selectPagination = (page, pageSize) => axios.get(`${REST_API_BASE_URL}?page=${page}&pageSize=${pageSize}`);
+export const selectBoard = (no) => axios.get(`${REST_API_BASE_URL}/${no}`);
 
 export const createBoard = (board) => axios.post(`${REST_API_BASE_URL}/write`, board);
 

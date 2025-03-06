@@ -15,7 +15,7 @@ function App() {
         {/*http://localhost:3000*/}
         <Route path="/" element={<ListBoardComponent />} />
         <Route path="/board" element={<ListBoardComponent />} />
-        <Route path="/write-board" element={<InsertComponent />} />
+        <Route path="/write" element={<InsertComponent />} />
         <Route path="/board/:no" element={<BoardComponent />} />
         <Route path="/board/update/:no" element={<UpdateComponent />} />
       </Routes>

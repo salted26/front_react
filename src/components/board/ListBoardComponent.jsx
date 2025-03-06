@@ -1,37 +1,49 @@
 import React, {useEffect, useState} from 'react';
-import {selectPagination} from "../../services/BoardService.js";
+import {boardList} from "../../services/BoardService.js";
 import {useNavigate} from "react-router-dom";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 
 const ListBoardComponent = () => {
 
   const [board, setBoard] = useState([]);
   const [totalPage, setTotalPage] = useState([]);
+  const [searchKeyword, setSearchKeyword] = useState("");
   const navigate = useNavigate();
 
   const pageSize = 10;
   let page = 0;
 
   useEffect(() => {
-    getBoard(page);
-  }, [page])
+    getBoard();
+  }, [searchKeyword])
 
   const fnWrite = () => {
     navigate("/write-board");
   }
 
-  const getBoard = () => {
-    selectPagination(page, pageSize).then(res => {
-      setBoard(res.data.content);
-      getTotalPages(res.data);
-    }).catch(err => {
-      console.log(err.message);
-    })
+  const getBoard = async () => {
+    if(searchKeyword === "" || searchKeyword === undefined) {
+      await boardList(page, pageSize, searchKeyword).then(res => {
+        setBoard(res.data.content);
+        getTotalPages(res.data);
+      }).catch(err => {
+        console.log(err.message);
+      })
+    } else {
+      await boardList(page, pageSize, searchKeyword).then(res =>{
+        setBoard(res.data.content);
+        getTotalPages(res.data);
+      }).catch(err =>{
+        console.log(err.message);
+      });
+    }
   }
 
   const getTotalPages = (data) => {
-    if(data.totalPages !== 0 || data.totalPages !== undefined) {
+    if(data.page.totalPages !== 0 || data.page.totalPages !== undefined) {
       let page = [];
-      for (let i = 1; i < data.totalPages+1; i++) {
+      for (let i = 1; i < data.page.totalPages+1; i++) {
         page.push(i);
       }
       setTotalPage(page)
@@ -41,8 +53,7 @@ const ListBoardComponent = () => {
 
   const getPage = (page) => {
     page = page-1;
-    console.log(page);
-    selectPagination(page, pageSize).then(res => {
+    boardList(page, pageSize, searchKeyword).then(res => {
       setBoard(res.data.content);
     });
   }
@@ -50,12 +61,16 @@ const ListBoardComponent = () => {
   return (
     <div className="container">
       <h2 className="text-center">List of Board</h2>
-      <div className="input-group">
-        <form action="" method="POST">
-          <input type="text" name="keyword" className="form-control"
-                 placeholder="Enter keyword" />
-        </form>
-      </div>
+      <form action={getBoard}>
+        <input type="text"
+               placeholder="검색"
+               className="search-input"
+               onChange={(e) => setSearchKeyword(e.target.value)}
+        />
+        <button className="w-[10%]">
+          <FontAwesomeIcon icon={faMagnifyingGlass} />
+        </button>
+      </form>
       <button className="btn btn-primary" onClick={() => fnWrite}>Write</button>
       <table className="table table-striped">
         <thead>
