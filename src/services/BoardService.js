@@ -6,7 +6,7 @@ export const listBoard = () => axios.get(REST_API_BASE_URL);
 
 export const boardList = (page, pageSize, searchKeyword) => axios.get(`${REST_API_BASE_URL}?page=${page}&pageSize=${pageSize}&searchKeyword=${searchKeyword}`);
 
-export const selectBoard = (no) => axios.get(`${REST_API_BASE_URL}/${no}`);
+export const selectBoard = (id) => axios.get(`${REST_API_BASE_URL}/${id}`);
 
 export const createBoard = (board) => axios.post(`${REST_API_BASE_URL}/write`, board);
 

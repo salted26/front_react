@@ -15,14 +15,14 @@ const ListBoardComponent = () => {
   let page = 0;
 
   useEffect(() => {
-    getBoard();
+    getBoardList();
   }, [searchKeyword])
 
   const fnWrite = () => {
-    navigate("/write-board");
+    navigate("/write");
   }
 
-  const getBoard = async () => {
+  const getBoardList = async () => {
     if(searchKeyword === "" || searchKeyword === undefined) {
       await boardList(page, pageSize, searchKeyword).then(res => {
         setBoard(res.data.content);
@@ -61,7 +61,7 @@ const ListBoardComponent = () => {
   return (
     <div className="container">
       <h2 className="text-center">List of Board</h2>
-      <form action={getBoard}>
+      <form action={getBoardList}>
         <input type="text"
                placeholder="검색"
                className="search-input"
@@ -85,8 +85,8 @@ const ListBoardComponent = () => {
         <tbody>
           {board.map((data, index) => {
             return (
-              <tr key={index} onClick={() => navigate(`/board/${data.no}`)}>
-                <td>{data.no}</td>
+              <tr key={index} onClick={() => navigate(`/board/${data.id}`)}>
+                <td>{data.id}</td>
                 <td>{data.title}</td>
                 <td>{data.writer}</td>
                 <td>{data.created_at}</td>
@@ -96,30 +96,32 @@ const ListBoardComponent = () => {
           })}
         </tbody>
       </table>
-      <div className="btn-box">
-        <button className="btn btn-primary" onClick={() => fnWrite}>Write</button>
+      <div className="pagination">
+        <nav aria-label="Page navigation example" style={{display: 'flex', justifycontent: 'center'}}>
+          <ul className="pagination">
+            <li className="page-item">
+              <a className="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            {totalPage.map((data, index) => {
+              return (
+                <li className="page-item" key={index}>
+                  <a className="page-link" href="#" onClick={() => getPage(data)}>{data}</a>
+                </li>
+              )
+            })}
+            <li className="page-item">
+            <a className="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
-      <nav aria-label="Page navigation example" style={{display: 'flex', justifycontent: 'center'}}>
-        <ul className="pagination">
-          <li className="page-item">
-            <a className="page-link" href="#" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-          {totalPage.map((page, index) => {
-            return (
-              <li className="page-item" key={index}>
-                <a className="page-link" href="#" onClick={() => getPage(page)}>{page}</a>
-              </li>
-            )
-          })}
-          <li className="page-item">
-          <a className="page-link" href="#" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
+      <div className="btn-bottom-box">
+        <button className="btn btn-primary" onClick={fnWrite}>Write</button>
+      </div>
     </div>
   );
 };

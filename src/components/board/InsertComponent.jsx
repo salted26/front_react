@@ -4,9 +4,9 @@ import {useNavigate, useParams} from "react-router-dom";
 
 const InsertComponent = () => {
 
-  const {no} = useParams();
+  const {id} = useParams();
 
-  const [id, setId] = useState('');
+  const [email, setEmail] = useState('');
   const [title, setTitle] = useState('');
   const [writer, setWriter] = useState('');
   const [content, setContent] = useState('');
@@ -16,31 +16,34 @@ const InsertComponent = () => {
   const fnSaveOrUpdateBoard = async (e) => {
     e.preventDefault();
 
-    if(validateForm()){
-      const board = {id, title, writer, content};
-      console.log(board);
-
-      if (no) {
-        updateBoard(no, board).then(res => {
-          console.log(res);
-          navigate(`/board/${no}`);
-        }).catch(error => {
-          console.log(error);
-        })
+    if (validateForm()) {
+      const board = {email, title, writer, content};
+      if (!id) {
+        if(window.confirm("등록하시겠습니까?")){
+          updateBoard(id, board).then(res => {
+            console.log("수정 : " + res);
+            navigate(`/board/${id}`);
+          }).catch(error => {
+            console.log(error);
+          })
+        }
+        return false;
       } else {
-        createBoard(board).then(res => {
-          console.log(res);
-          navigate(`/board`);
-        }).catch(error => {
-          console.log(error);
-        })
+        if(window.confirm("수정하시겠습니까?")){
+          createBoard(board).then(res => {
+            console.log(res);
+            navigate(`/board`);
+          }).catch(error => {
+            console.log(error);
+          })
+        }
+        return false;
       }
-
     }
   }
 
   const [errors, setErrors] = useState({
-    id: "",
+    email: "",
     title: "",
     writer:"",
     content:""
@@ -51,10 +54,10 @@ const InsertComponent = () => {
 
     const errorsCopy = {...errors};
 
-    if(id.trim()) {
-      errorsCopy.id = "";
+    if(email.trim()) {
+      errorsCopy.email = "";
     } else {
-      errorsCopy.id = '아이디는 필수 입력입니다.'
+      errorsCopy.email = '아이디는 필수 입력입니다.'
       valid = false;
     }
 
@@ -91,15 +94,14 @@ const InsertComponent = () => {
             <div className="card-body">
               <form>
                 <div className="form-group mb-2">
-                  <label className="form-label">아이디 : </label>
-                  <input className={`form-control ${errors.id ? 'is-invalid' : ''}`}
-                         type="text"
-                         placeholder="아이디를 입력하세요"
-                         name="id"
-                         value={id}
-                         onChange={(e) => setId(e.target.value)}
+                  <label className="form-label">이메일 : </label>
+                  <input className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                         type="email"
+                         placeholder="이메일을 입력하세요"
+                         name="email"
+                         onChange={(e) => setEmail(e.target.value)}
                   />
-                  { errors.id && <div className="invalid-feedback">{errors.id}</div> }
+                  { errors.email && <div className="invalid-feedback">{errors.email}</div> }
                 </div>
                 <div className="form-group mb-2">
                   <label className="form-label">제목 : </label>
@@ -107,7 +109,6 @@ const InsertComponent = () => {
                          type="text"
                          placeholder="제목을 입력하세요"
                          name="title"
-                         value={title}
                          onChange={(e) => setTitle(e.target.value)}
                   />
                   { errors.title && <div className="invalid-feedback">{errors.title}</div>}
@@ -118,7 +119,6 @@ const InsertComponent = () => {
                          type="text"
                          placeholder="작성자를 입력하세요"
                          name="writer"
-                         value={writer}
                          onChange={(e) => setWriter(e.target.value)}
                   />
                   { errors.writer && <div className="invalid-feedback">{errors.writer}</div>}
@@ -129,12 +129,10 @@ const InsertComponent = () => {
                          type="text"
                          placeholder="내용을 입력하세요"
                          name="content"
-                         value={content}
                          onChange={(e) => setContent(e.target.value)}
                   />
                   { errors.content && <div className="invalid-feedback">{errors.content}</div>}
                 </div>
-
                 <button className="btn btn-outline-success" onClick={fnSaveOrUpdateBoard}>Write</button>
               </form>
             </div>

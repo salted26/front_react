@@ -1,21 +1,28 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from "react-router-dom";
-import {createBoard, selectBoard, updateBoard} from "../../services/BoardService.js";
+import {createBoard, deleteBoard, selectBoard, updateBoard} from "../../services/BoardService.js";
 
 const UpdateComponent = () => {
 
-  const {no} = useParams();
+  const {id} = useParams();
   const [board, setBoard] = useState({})
 
-  const [id, setId] = useState('');
+  const [email, setEmail] = useState('');
   const [title, setTitle] = useState('');
   const [writer, setWriter] = useState('');
   const [content, setContent] = useState('');
 
   const navigate = useNavigate();
 
-  const getBoard = async (no) => {
-    selectBoard(no).then(res => {
+  const [errors, setErrors] = useState({
+    email: "",
+    title: "",
+    writer: "",
+    content: ""
+  })
+
+  const getBoard = async (id) => {
+    selectBoard(id).then(res => {
       setBoard(res.data);
     })
   }
@@ -24,71 +31,73 @@ const UpdateComponent = () => {
     e.preventDefault();
 
     if (validateForm()) {
-      const board = {id, title, writer, content};
+      const board = {email, title, writer, content};
 
-      if (no) {
-        updateBoard(no, board).then(res => {
-          console.log("수정 : " + res);
-          navigate(`/board/${no}`);
-        }).catch(error => {
-          console.log(error);
-        })
+      if(window.confirm("등록하시겠습니까?")){
+        if (id) {
+          updateBoard(id, board).then(res => {
+            console.log("수정 : " + res);
+            navigate(`/board/${id}`);
+          }).catch(error => {
+            console.log(error);
+          })
+        }
+        return false;
       } else {
-        createBoard(board).then(res => {
-          console.log(res);
-          navigate(`/board`);
-        }).catch(error => {
-          console.log(error);
-        })
+        if(window.confirm("수정하시겠습니까?")){
+          createBoard(board).then(res => {
+            console.log(res);
+            navigate(`/board`);
+          }).catch(error => {
+            console.log(error);
+          })
+        }
+        return false;
       }
     }
   }
 
   useEffect(() => {
-    if(no){
-      getBoard(no);
+    if(id){
+      getBoard(id);
     }
-  }, [no])
+  }, [id])
 
-  const [errors, setErrors] = useState({
-    id: id,
-    title: title,
-    writer: writer,
-    content: content
-  })
+
 
   const validateForm = () => {
     let valid = true;
 
     const errorsCopy = {...errors};
 
-    // if(id.trim()) {
-    //   errorsCopy.id = "";
-    // } else {
-    //   errorsCopy.id = '아이디는 필수 입력입니다.'
-    //   valid = false;
-    // }
-    //
-    // if(title.trim()) {
-    //   errorsCopy.title = "";
-    // } else {
-    //   errorsCopy.title = '제목은 필수 입력입니다.'
-    //   valid = false;
-    // }
-    //
-    // if(writer.trim()) {
-    //   errorsCopy.writer = "";
-    // } else {
-    //   errorsCopy.writer = '작성자는 필수 입력입니다.'
-    //   valid = false;
-    // }
-    //
-    // if(content.trim()) {
-    //   errorsCopy.content = "";
-    // } else {
-    //   errorsCopy.content = '내용은 필수 입력입니다..'
-    //   valid = false;
-    // }
+    if(email.trim()) {
+      errorsCopy.email = "";
+    } else {
+      errorsCopy.email = '이메일은 필수 입력입니다.'
+      valid = false;
+    }
+
+    if(title.trim()) {
+      errorsCopy.title = "";
+    } else {
+      console.log(errorsCopy.title);
+      errorsCopy.title = '제목은 필수 입력입니다.'
+      valid = false;
+    }
+
+    if(writer.trim()) {
+      errorsCopy.writer = "";
+    } else {
+      errorsCopy.writer = '작성자는 필수 입력입니다.'
+      valid = false;
+    }
+
+    if(content.trim()) {
+      errorsCopy.content = "";
+    } else {
+      errorsCopy.content = '내용은 필수 입력입니다..'
+      valid = false;
+    }
 
     setErrors(errorsCopy);
     return valid;
@@ -102,15 +111,15 @@ const UpdateComponent = () => {
             <div className="card-body">
               <form>
                 <div className="form-group mb-2">
-                  <label className="form-label">아이디 : </label>
-                  <input className={`form-control ${errors.id ? 'is-invalid' : ''}`}
-                         type="text"
-                         placeholder="아이디를 입력하세요"
-                         name="id"
-                         defaultValue={board.id}
-                         onChange={(e) => setId(e.target.value)}
+                  <label className="form-label">Email : </label>
+                  <input className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                         type="email"
+                         placeholder="Email을 입력하세요"
+                         name="email"
+                         defaultValue={board.email}
+                         onChange={(e) => setEmail(e.target.value)}
                   />
-                  { errors.id && <div className="invalid-feedback">{errors.id}</div> }
+                  { errors.email && <div className="invalid-feedback">{errors.Email}</div> }
                 </div>
                 <div className="form-group mb-2">
                   <label className="form-label">제목 : </label>
