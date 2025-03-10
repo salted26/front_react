@@ -7,6 +7,7 @@ import InsertComponent from "./components/board/InsertComponent.jsx";
 import ReadComponent from "./components/board/ReadComponent.jsx";
 import UpdateComponent from "./components/board/UpdateComponent.jsx";
 import LoginComponent from "./components/user/LoginComponent.jsx";
+import SignupComponent from "./components/user/SignupComponent.jsx";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/board/update/:id" element={<UpdateComponent />} />
         {/*login*/}
         <Route path="/login" element={<LoginComponent />} />
+        <Route path="/signup" element={<SignupComponent />} />
       </Routes>
       <FooterComponent />
     </BrowserRouter>

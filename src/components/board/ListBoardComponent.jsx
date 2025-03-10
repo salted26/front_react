@@ -16,28 +16,19 @@ const ListBoardComponent = () => {
 
   useEffect(() => {
     getBoardList();
-  }, [searchKeyword])
+  }, [page])
 
   const fnWrite = () => {
     navigate("/write");
   }
 
   const getBoardList = async () => {
-    if(searchKeyword === "" || searchKeyword === undefined) {
-      await boardList(page, pageSize, searchKeyword).then(res => {
-        setBoard(res.data.content);
-        getTotalPages(res.data);
-      }).catch(err => {
-        console.log(err.message);
-      })
-    } else {
-      await boardList(page, pageSize, searchKeyword).then(res =>{
-        setBoard(res.data.content);
-        getTotalPages(res.data);
-      }).catch(err =>{
-        console.log(err.message);
-      });
-    }
+    await boardList(page, pageSize, searchKeyword).then(res =>{
+      setBoard(res.data.content);
+      getTotalPages(res.data);
+    }).catch(err =>{
+      console.log(err.message);
+    });
   }
 
   const getTotalPages = (data) => {

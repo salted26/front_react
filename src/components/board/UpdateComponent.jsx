@@ -15,7 +15,6 @@ const UpdateComponent = () => {
 
   const getBoard = async (id) => {
     selectBoard(id).then(res => {
-      // setBoard(res.data);
       setEmail(res.data.email);
       setTitle(res.data.title);
       setWriter(res.data.writer);
@@ -99,7 +98,7 @@ const UpdateComponent = () => {
       <div className="container">
         <div className="row">
           <div className="card">
-            <h3 className="text-center">Write Board</h3>
+            <h3 className="text-center">Update Board</h3>
             <div className="card-body">
               <form>
                 <div className="form-group mb-2">
@@ -147,7 +146,8 @@ const UpdateComponent = () => {
                 </div>
                 <div className="btn-bottom-box">
                   <button className="btn btn-outline-success" onClick={fnSaveOrUpdateBoard}>수정</button>
-                  <button className="btn btn-outline-warning" onClick={()=> navigate(`/board/${no}`)}>취소</button>
+                  <button className="btn btn-outline-warning" onClick={()=> navigate(`/board/${id}`)}
+                          style={{marginLeft: 10,}}>취소</button>
                 </div>
               </form>
             </div>

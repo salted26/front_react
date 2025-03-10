@@ -1,13 +1,22 @@
 import React, {useState} from 'react';
 import "./user.css"
+import {login} from "../../services/LoginService.js";
+import {useNavigate} from "react-router-dom";
 
 const LoginComponent = () => {
 
-  const [id, setId] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (e) => {
-    e.preventDefault();
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    const userData = {
+      username,
+      password,
+    }
+    login(userData);
+    navigate("/");
   }
 
   return (
@@ -15,15 +24,18 @@ const LoginComponent = () => {
         <div className="login-container">
           <form action={handleLogin} className="form form-control">
             <h1 style={{textAlign:"center", marginBottom:"30px"}}>Login</h1>
-            <label>아이디</label>
-            <input type="text" name="id"
-                   className="form-control" placeholder="ID"
-                   onChange={(e) => setId(e.target.value)} />
-            <labe>비밀번호</labe>
+            <label>Email</label>
+            <input type="text" name="username"
+                   className="form-control" placeholder="Email"
+                   onChange={(e) => setUsername(e.target.value)} />
+            <label>비밀번호</label>
             <input type="password" name="password"
-                   className="form-control" pattern="password" placeholder="Password"
+                   className="form-control" placeholder="Password"
                    onChange={(e) => setPassword(e.target.value)} />
-            <button className="btn btn-primary">로그인</button>
+            <button className="btn btn-primary login-button">로그인</button>
+            <div className="signup-link">
+              <a href="/signup">회원가입</a>
+            </div>
           </form>
         </div>
       </div>
