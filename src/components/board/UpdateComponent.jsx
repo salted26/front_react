@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from "react-router-dom";
-import {createBoard, deleteBoard, selectBoard, updateBoard} from "../../services/BoardService.js";
+import {createBoard, selectBoard, updateBoard} from "../../services/BoardService.js";
 
 const UpdateComponent = () => {
 
   const {id} = useParams();
-  const [board, setBoard] = useState({})
 
   const [email, setEmail] = useState('');
   const [title, setTitle] = useState('');
@@ -14,16 +13,13 @@ const UpdateComponent = () => {
 
   const navigate = useNavigate();
 
-  const [errors, setErrors] = useState({
-    email: "",
-    title: "",
-    writer: "",
-    content: ""
-  })
-
   const getBoard = async (id) => {
     selectBoard(id).then(res => {
-      setBoard(res.data);
+      // setBoard(res.data);
+      setEmail(res.data.email);
+      setTitle(res.data.title);
+      setWriter(res.data.writer);
+      setContent(res.data.content);
     })
   }
 
@@ -63,7 +59,12 @@ const UpdateComponent = () => {
     }
   }, [id])
 
-
+  const [errors, setErrors] = useState({
+    email: "",
+    title: "",
+    writer: "",
+    content: ""
+  })
 
   const validateForm = () => {
     let valid = true;
@@ -71,30 +72,21 @@ const UpdateComponent = () => {
     const errorsCopy = {...errors};
 
     if(email.trim()) {
-      errorsCopy.email = "";
-    } else {
       errorsCopy.email = '이메일은 필수 입력입니다.'
       valid = false;
     }
 
     if(title.trim()) {
-      errorsCopy.title = "";
-    } else {
-      console.log(errorsCopy.title);
       errorsCopy.title = '제목은 필수 입력입니다.'
       valid = false;
     }
 
     if(writer.trim()) {
-      errorsCopy.writer = "";
-    } else {
       errorsCopy.writer = '작성자는 필수 입력입니다.'
       valid = false;
     }
 
     if(content.trim()) {
-      errorsCopy.content = "";
-    } else {
       errorsCopy.content = '내용은 필수 입력입니다..'
       valid = false;
     }
@@ -116,10 +108,10 @@ const UpdateComponent = () => {
                          type="email"
                          placeholder="Email을 입력하세요"
                          name="email"
-                         defaultValue={board.email}
+                         defaultValue={email}
                          onChange={(e) => setEmail(e.target.value)}
                   />
-                  { errors.email && <div className="invalid-feedback">{errors.Email}</div> }
+                  { errors.email && <div className="invalid-feedback">{errors.email}</div> }
                 </div>
                 <div className="form-group mb-2">
                   <label className="form-label">제목 : </label>
@@ -127,7 +119,7 @@ const UpdateComponent = () => {
                          type="text"
                          placeholder="제목을 입력하세요"
                          name="title"
-                         defaultValue={board.title}
+                         defaultValue={title}
                          onChange={(e) => setTitle(e.target.value)}
                   />
                   { errors.title && <div className="invalid-feedback">{errors.title}</div>}
@@ -138,7 +130,7 @@ const UpdateComponent = () => {
                          type="text"
                          placeholder="작성자를 입력하세요"
                          name="writer"
-                         defaultValue={board.writer}
+                         defaultValue={writer}
                          onChange={(e) => setWriter(e.target.value)}
                   />
                   { errors.writer && <div className="invalid-feedback">{errors.writer}</div>}
@@ -148,13 +140,15 @@ const UpdateComponent = () => {
                   <textarea className={`form-control ${errors.content ? 'is-invalid' : ''}`}
                          placeholder="내용을 입력하세요"
                          name="content"
-                            defaultValue={board.content}
+                            defaultValue={content}
                          onChange={(e) => setContent(e.target.value)}
                   />
                   { errors.content && <div className="invalid-feedback">{errors.content}</div>}
                 </div>
-                <button className="btn btn-outline-success" onClick={fnSaveOrUpdateBoard}>수정</button>
-                <button className="btn btn-outline-warning" onClick={()=> navigate(`/board/${no}`)}>취소</button>
+                <div className="btn-bottom-box">
+                  <button className="btn btn-outline-success" onClick={fnSaveOrUpdateBoard}>수정</button>
+                  <button className="btn btn-outline-warning" onClick={()=> navigate(`/board/${no}`)}>취소</button>
+                </div>
               </form>
             </div>
           </div>
