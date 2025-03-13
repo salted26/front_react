@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {signup} from "../../services/LoginService.js";
-import {useNavigate} from "react-router-dom";
+// import {useNavigate} from "react-router-dom";
 
 const SignupComponent = () => {
 
@@ -9,7 +9,7 @@ const SignupComponent = () => {
   const [nickname, setNickname] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleSignup = () => {
     const userData = {
@@ -21,7 +21,7 @@ const SignupComponent = () => {
       console.log(userData.username);
       signup(userData);
       alert("회원가입이 완료되었습니다.");
-      navigate("/login")
+      // navigate("/login")
     } else {
       alert("Passwords don't match")
       return false;

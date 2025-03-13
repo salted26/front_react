@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {boardList} from "../../services/BoardService.js";
+import {listBoard} from "../../services/BoardService.js";
 import {useNavigate} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
@@ -7,45 +7,22 @@ import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 const ListBoardComponent = () => {
 
   const [board, setBoard] = useState([]);
-  const [totalPage, setTotalPage] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const navigate = useNavigate();
 
-  const pageSize = 10;
-  let page = 0;
-
   useEffect(() => {
     getBoardList();
-  }, [page])
+  }, [])
 
   const fnWrite = () => {
     navigate("/write");
   }
 
   const getBoardList = async () => {
-    await boardList(page, pageSize, searchKeyword).then(res =>{
-      setBoard(res.data.content);
-      getTotalPages(res.data);
+    await listBoard().then(res =>{
+      setBoard(res.data);
     }).catch(err =>{
       console.log(err.message);
-    });
-  }
-
-  const getTotalPages = (data) => {
-    if(data.page.totalPages !== 0 || data.page.totalPages !== undefined) {
-      let page = [];
-      for (let i = 1; i < data.page.totalPages+1; i++) {
-        page.push(i);
-      }
-      setTotalPage(page)
-    }
-    return false;
-  }
-
-  const getPage = (page) => {
-    page = page-1;
-    boardList(page, pageSize, searchKeyword).then(res => {
-      setBoard(res.data.content);
     });
   }
 
@@ -87,29 +64,6 @@ const ListBoardComponent = () => {
           })}
         </tbody>
       </table>
-      <div className="pagination">
-        <nav aria-label="Page navigation example" style={{display: 'flex', justifycontent: 'center'}}>
-          <ul className="pagination">
-            <li className="page-item">
-              <a className="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-            {totalPage.map((data, index) => {
-              return (
-                <li className="page-item" key={index}>
-                  <a className="page-link" href="#" onClick={() => getPage(data)}>{data}</a>
-                </li>
-              )
-            })}
-            <li className="page-item">
-            <a className="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </div>
       <div className="btn-bottom-box">
         <button className="btn btn-primary" onClick={fnWrite}>Write</button>
       </div>
